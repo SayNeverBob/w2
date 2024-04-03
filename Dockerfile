@@ -20,10 +20,29 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
     php7-pdo_mysql \
     php7-fpm \
 php7-mysqli \
+php7-bcmath \
+
     php7-curl \   
     nginx \
     && rm -f /var/cache/apk/*
 
+RUN apk add \
+        freetype \
+        freetype-dev \
+        libpng \
+        libpng-dev \
+        libjpeg-turbo \
+        libjpeg-turbo-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype-dir=/usr/include/ \
+        --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
+    && apk del \
+        freetype-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+    \
+    && rm /var/cache/apk/*
 
 
 # 设定工作目录
