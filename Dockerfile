@@ -21,7 +21,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
     php7-fpm \
 php7-mysqli \
 php7-bcmath \
-
     php7-curl \   
     nginx \
     && rm -f /var/cache/apk/*
@@ -41,9 +40,7 @@ RUN apk add \
         freetype-dev \
         libpng-dev \
         libjpeg-turbo-dev \
-    \
     && rm /var/cache/apk/*
-
 
 # 设定工作目录
 WORKDIR /app
