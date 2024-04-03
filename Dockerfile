@@ -19,6 +19,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
 	php7-pdo \
     php7-pdo_mysql \
     php7-fpm \
+php7-mysqli \
     php7-curl \   
     nginx \
     && rm -f /var/cache/apk/*
