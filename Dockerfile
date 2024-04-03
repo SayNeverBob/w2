@@ -25,24 +25,13 @@ php7-mysqli \
 php7-bcmath \
     php7-curl \   
     nginx \
+&& apk add --no-cache libxpm libxpm-dev \
+  && apk add --no-cache freetype freetype-dev libjpeg libpng libpng-dev libwebp-dev libjpeg-turbo-dev libmcrypt-dev  \
+  && docker-php-ext-configure gd --with-gd --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-webp-dir=/usr/include/  --with-freetype-dir=/usr/include/ --with-xpm-dir=/usr/include/  \
+  && docker-php-ext-install gd \
     && rm -f /var/cache/apk/*
 
-RUN apk add \
-        freetype \
-        freetype-dev \
-        libpng \
-        libpng-dev \
-        libjpeg-turbo \
-        libjpeg-turbo-dev \
-    && docker-php-ext-configure gd \
-        --with-freetype-dir=/usr/include/ \
-        --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-    && apk del \
-        freetype-dev \
-        libpng-dev \
-        libjpeg-turbo-dev \
-    && rm /var/cache/apk/*
+
 
 # 设定工作目录
 WORKDIR /app
