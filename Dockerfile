@@ -23,6 +23,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
     nginx \
     && rm -f /var/cache/apk/*
 
+
+
 # 设定工作目录
 WORKDIR /app
 
