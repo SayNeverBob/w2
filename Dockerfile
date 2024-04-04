@@ -24,18 +24,25 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # 设定工作目录
-WORKDIR /app
+#WORKDIR /app
 
 # 将当前目录下所有文件拷贝到/app （.dockerignore中文件除外）
-COPY . /app
+#COPY . /app
 
-# 替换nginx、fpm、php配置
-RUN cp /app/conf/nginx.conf /etc/nginx/conf.d/default.conf \
-    && cp /app/conf/fpm.conf /etc/php7/php-fpm.d/www.conf \
-    && cp /app/conf/php.ini /etc/php7/php.ini \
-    && mkdir -p /run/nginx \
-    && chmod -R 777 /app/runtime \
-    && mv /usr/sbin/php-fpm7 /usr/sbin/php-fpm
+
+ 
+# 清理已知的安全风险
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+ 
+# 配置Nginx服务器
+RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
+ 
+# 默认情况下，Nginx和PHP-FPM不会在后台运行，所以我们需要修改他们的配置
+RUN sed -i 's/^user = www-data/user = root/' /etc/php/7.4/fpm/pool.d/www.conf
+RUN sed -i 's/^group = www-data/group = root/' /etc/php/7.4/fpm/pool.d/www.conf
+ 
+# 将nginx的配置文件链接到默认位置
+RUN ln -snf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # 暴露端口
 # 此处端口必须与「服务设置」-「流水线」以及「手动上传代码包」部署时填写的端口一致，否则会部署失败。
