@@ -20,7 +20,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
     php7-pdo_mysql \
     php7-fpm \
 php-pear \
-php-dev \
 php7-mysqli \
 php7-bcmath \
     php7-curl \   
