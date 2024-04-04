@@ -1,40 +1,27 @@
 # 二开推荐阅读[如何提高项目构建效率](https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/scene/build/speed.html)
 # 选择构建用基础镜像（选择原则：在包含所有用到的依赖前提下尽可能体积小）。如需更换，请到[dockerhub官方仓库](https://hub.docker.com/_/php?tab=tags)自行选择后替换。
-FROM alpine:3.13
+FROM ubuntu:20.04
 
 # 容器默认时区为UTC，如需使用上海时间请启用以下时区设置命令
 # RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
 
 # 使用 HTTPS 协议访问容器云调用证书安装
-RUN apk add ca-certificates
+#RUN apk add ca-certificates
 
 # 安装依赖包，如需其他依赖包，请到alpine依赖包管理(https://pkgs.alpinelinux.org/packages?name=php8*imagick*&branch=v3.13)查找。
 # 选用国内镜像源以提高下载速度
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories \
-    && apk add --update --no-cache \
-    php7 \
-    php7-json \
-    php7-ctype \
-	php7-exif \
-	php7-pdo \
-    php7-pdo_mysql \
-    php7-fpm \
-php-pear \
-php7-mysqli \
-php7-bcmath \
-    php7-curl \   
-    nginx 
-
-RUN apk --update add tzdata \
-   libjpeg-turbo-dev \
-     libpng-dev \
-   freetype-dev \
-  && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
-  && echo "${TIMEZONE}" > /etc/timezone
-
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2 --with-png-dir=/usr --enable-gd-native-ttf --with-jpeg-dir=/usr \
-    && docker-php-ext-install redis mysqli gd pdo_mysql redis opcache zip
-
+RUN apt-get update && apt-get install -y \
+    nginx \
+    php-fpm \
+    php-common \
+    php-json \
+    php-opcache \
+    php-mysql \
+    php-xml \
+    php-cli \
+    php-gd \
+    php-curl && \
+    rm -rf /var/lib/apt/lists/*
 
 # 设定工作目录
 WORKDIR /app
