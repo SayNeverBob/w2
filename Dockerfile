@@ -11,7 +11,8 @@ FROM ubuntu:20.04
 # 安装依赖包，如需其他依赖包，请到alpine依赖包管理(https://pkgs.alpinelinux.org/packages?name=php8*imagick*&branch=v3.13)查找。
 # 选用国内镜像源以提高下载速度
 RUN apt-get update && apt-get install -y \
-    nginx \
+apt-utils \    
+nginx \
     php-fpm \
     php-common \
     php-json \
